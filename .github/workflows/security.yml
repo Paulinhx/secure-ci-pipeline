@@ -1,0 +1,57 @@
+# 🏷 Name of the GitHub Actions workflow (visible in the GitHub UI)
+name: Security Checks
+
+# 📦 Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# 🔐 Define the job block for our security pipeline
+jobs:
+  security:
+    # 🚀 Use the latest Ubuntu image as the environment
+    runs-on: ubuntu-latest
+
+    steps:
+      # 📥 Step 1: Checkout the source code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 🐍 Step 2: Set up Python 3.11 (required for your Flask app and Semgrep)
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      # ⚙️ Step 3: Install your Python dependencies (like Flask)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r app/requirements.txt
+
+      # 🔍 Step 4: Run Semgrep for static code analysis (SAST)
+      - name: Run Semgrep (SAST)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/ci"  # Use default rules for CI pipelines
+
+      # 📥 Step 5: Install Trivy (vulnerability scanner)
+      - name: Install Trivy
+        run: |
+          sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy -y
+
+      # 🐳 Step 6: Build your Flask app as a Docker image
+      - name: Build Docker image
+        run: docker build -t app-sec-demo .
+
+      # 🧪 Step 7: Scan the image using Trivy
+      - name: Run Trivy scan
+        run: |
+          trivy image --severity HIGH,CRITICAL --exit-code 1 app-sec-demo
+        # ⛔ The --exit-code 1 flag ensures the pipeline fails if any HIGH/CRITICAL vulnerabilities are found
