@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+app/venv/
+.venv/
+env/
+venv/
+ENV/
+
+# VS Code settings
+.vscode/
+
+# macOS files
+.DS_Store
+
+# Docker artifacts
+*.tar
+*.img
+
+# Python virtual environment metadata
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs and local test results
+*.log
+
+# Trivy or scan reports
+*.json
+*.html
+*.txt
+scan-results/
+
+# GitHub Actions temporary files
+.github/workflows/__pycache__/
+
+# Ignore Python cache files globally
+**/__pycache__/
