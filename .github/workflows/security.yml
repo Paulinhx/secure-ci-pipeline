@@ -32,11 +32,19 @@ jobs:
           pip install -r app/requirements.txt
 
       # 🔍 Step 4: Run Semgrep for static code analysis (SAST) + with GDPR Rules
-      - name: Run Semgrep (SAST)
+      - name: Run Semgrep (SAST) with SARIF Output
         uses: returntocorp/semgrep-action@v1
         with:
           config: ./semgrep-rules # Use Security Engineer custom rules
             #"p/ci"  # Use default rules for CI pipelines
+            generateSarif: true   # with SARIF output
+        continue-on-error: true  # avoids failing before SARIF is uploaded
+
+     # 📤 Upload results to GitHub Code Scanning
+      - name: Upload Semgrep Results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep.sarif
 
       # 📥 Step 5: Install Trivy (vulnerability scanner)
       - name: Install Trivy
@@ -56,3 +64,7 @@ jobs:
         run: |
           trivy image --severity HIGH,CRITICAL --exit-code 1 app-sec-demo
         # ⛔ The --exit-code 1 flag ensures the pipeline fails if any HIGH/CRITICAL vulnerabilities are found
+      
+
+    
+ 
