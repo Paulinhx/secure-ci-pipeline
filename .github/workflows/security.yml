@@ -31,11 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
 
-      # 🔍 Step 4: Run Semgrep for static code analysis (SAST)
+      # 🔍 Step 4: Run Semgrep for static code analysis (SAST) + with GDPR Rules
       - name: Run Semgrep (SAST)
         uses: returntocorp/semgrep-action@v1
         with:
-          config: "p/ci"  # Use default rules for CI pipelines
+          config: ./semgrep-rules # Use Security Engineer custom rules
+            #"p/ci"  # Use default rules for CI pipelines
 
       # 📥 Step 5: Install Trivy (vulnerability scanner)
       - name: Install Trivy
