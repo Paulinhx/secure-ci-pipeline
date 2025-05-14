@@ -1,0 +1,18 @@
+rules:
+  - id: docker-use-slim-base
+    pattern: FROM python:3
+    message: "Use a slim or minimal base image to reduce attack surface."
+    severity: WARNING
+    languages: [dockerfile]
+
+  - id: docker-no-root-user
+    pattern: USER root
+    message: "Avoid running as root in containers; violates least privilege."
+    severity: ERROR
+    languages: [dockerfile]
+
+  - id: avoid-secrets-in-dockerfile
+    pattern: ENV SECRET=...
+    message: "Avoid hardcoding secrets in Dockerfiles."
+    severity: ERROR
+    languages: [dockerfile]

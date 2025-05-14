@@ -1,0 +1,10 @@
+rules:
+  - id: open-s3-bucket
+    pattern: |
+      resource "aws_s3_bucket_acl" "..."
+      {
+        acl = "public-read"
+      }
+    message: "Avoid public-read S3 buckets. Violates GDPR data protection."
+    severity: ERROR
+    languages: [hcl]

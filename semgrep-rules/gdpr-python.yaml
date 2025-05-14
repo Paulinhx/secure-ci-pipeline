@@ -1,0 +1,32 @@
+rules:
+  - id: avoid-eval
+    pattern: eval(...)
+    message: "Avoid using eval(); it's a serious security risk."
+    severity: ERROR
+    languages: [python]
+
+  - id: avoid-subprocess
+    pattern: subprocess.run(...)
+    message: "Avoid subprocess; can introduce command injection."
+    severity: WARNING
+    languages: [python]
+
+  - id: avoid-os-system
+    pattern: os.system(...)
+    message: "Avoid os.system(); use safer alternatives."
+    severity: WARNING
+    languages: [python]
+
+  - id: avoid-flask-debug
+    pattern: app.run(debug=True)
+    message: "Never use debug=True in production. Disable for GDPR compliance."
+    severity: ERROR
+    languages: [python]
+
+  - id: avoid-hardcoded-secrets
+    pattern-either:
+      - pattern: password = "<...>"
+      - pattern: api_key = "<...>"
+    message: "Possible hardcoded secret; move to environment variable or secret manager."
+    severity: ERROR
+    languages: [python]
