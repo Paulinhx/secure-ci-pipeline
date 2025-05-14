@@ -1,0 +1,11 @@
+
+rules:
+  - id: avoid-eval
+    patterns:
+      - pattern: eval(...)
+    message: "Avoid using eval(); it's a serious security risk."
+    severity: ERROR
+    languages: [python]
+    metadata:
+      category: security
+      technology: python
