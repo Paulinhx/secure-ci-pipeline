@@ -10,8 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install Checkov
-        run: pip install checkov
+      - name: Install Python dependencies
+        run: | 
+           pip install -r iac-checkov-opa/requirements.txt
 
       - name: Run Checkov on Terraform
         run: checkov -d ./iac-checkov-opa --framework terraform --quiet --exit-code 1
