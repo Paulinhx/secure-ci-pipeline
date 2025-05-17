@@ -31,14 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r app/requirements.txt
 
-      # 🔍 Step 4: Run Semgrep for static code analysis (SAST) + with GDPR Rules
+      # 🔍 Step 4: Run Semgrep for static code analysis (SAST) with GDPR Rules
       - name: Run Semgrep (SAST) with SARIF Output
         uses: returntocorp/semgrep-action@v1
         with:
-          config: ./semgrep-rules # Use Security Engineer custom rules
-            #"p/ci"  # Use default rules for CI pipelines
-            generateSarif: true   # with SARIF output
-        continue-on-error: true  # avoids failing before SARIF is uploaded
+          config: ./semgrep-rules  # Use Security Engineer custom rules
+        continue-on-error: true    # Avoids failing before SARIF is uploaded
 
      # 📤 Upload results to GitHub Code Scanning
       - name: Upload Semgrep Results to GitHub Security tab
