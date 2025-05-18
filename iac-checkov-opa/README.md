@@ -13,7 +13,7 @@ This project demonstrates how to secure Infrastructure-as-Code (IaC) using:
 
 ```
 iac-checkov-opa/
-├── main.tf                       # Insecure AWS S3 bucket (demo)
+├── main.tf                      # Insecure AWS S3 bucket (demo)
 ├── policies/
 │   └── s3-policy.rego           # OPA policy to block public-read buckets
 ├── .github/
