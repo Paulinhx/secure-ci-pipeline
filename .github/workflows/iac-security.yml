@@ -1,0 +1,35 @@
+name: IaC Security Scan
+
+on:
+  push:
+    branches: [ feature/iac-security ]
+
+jobs:
+  checkov-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Python dependencies
+        run: | 
+           pip install -r iac-checkov-opa/requirements.txt
+
+      - name: Run Checkov on Terraform
+        run: checkov -d ./iac-checkov-opa --framework terraform --quiet --exit-code 1
+
+  opa-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install OPA
+        run: |
+          curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64
+          chmod +x opa
+          sudo mv opa /usr/local/bin/
+
+      - name: Run OPA Policy on Terraform input
+        run: |
+          opa eval --format pretty --data ./iac-checkov-opa/policies \
+            --input ./iac-checkov-opa/main.tf \
+            "data.policy"
